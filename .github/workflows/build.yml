@@ -19,15 +19,14 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
-      # 事実1,2,3をすべて満たす唯一のコマンド
       run: dotnet restore OBD.NET/OBD.NET.sln
 
     - name: Build project
-      # こちらも同様
       run: dotnet build OBD.NET/OBD.NET.sln --no-restore --configuration Release
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll
-        path: OBD.NET/bin/Release/**/*.dll
+        # ここが最後の修正点です！正しいパスに直しました。
+        path: OBD.NET/OBD.NET/bin/Release/**/*.dll

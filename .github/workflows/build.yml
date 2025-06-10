@@ -10,7 +10,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -18,18 +19,16 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
-      run: dotnet restore OBD.NET/OBD.NET.sln
+      # slnファイルは一番上の階層にあるので、パスを修正します
+      run: dotnet restore OBD.NET.sln
 
-    - name: Build
-      run: dotnet build OBD.NET/OBD.NET.sln --no-restore --configuration Release
-
-    # === ここが新しい偵察ステップです！ ===
-    - name: List files after build
-      run: dir /s
-    # ====================================
+    - name: Build project
+      # こちらもslnファイルのパスを修正します
+      run: dotnet build OBD.NET.sln --no-restore --configuration Release
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll
-        path: OBD.NET/OBD.NET/bin/Release/**/*.dll
+        # 完成したDLLを探しに行く正しい住所に修正します
+        path: OBD.NET/bin/Release/**/*.dll

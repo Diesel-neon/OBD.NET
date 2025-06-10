@@ -1,4 +1,4 @@
-name: .NET Build
+name: .NET Framework Build
 
 on:
   push:
@@ -7,26 +7,36 @@ on:
 
 jobs:
   build:
+    # .NET FrameworkはWindows専用なので、実行環境をWindowsに指定
     runs-on: windows-latest
 
     steps:
+    # 1. ソースコードをダウンロード
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
+    # 2. .NET Framework用の正しいビルドツールを準備
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
 
-    - name: Restore dependencies
-      run: dotnet restore OBD.NET/OBD.NET.sln
+    # 3. 正しいコマンドでビルド準備とビルドを実行
+    - name: Restore NuGet packages
+      run: nuget restore OBD.NET/OBD.NET.sln
+    - name: Build with MSBuild
+      run: msbuild OBD.NET/OBD.NET.sln /p:Configuration=Release
 
-    - name: Build project
-      run: dotnet build OBD.NET/OBD.NET.sln --no-restore --configuration Release
+    # 4. 【最重要】ビルド後の全ファイルをリストアップして場所を特定する
+    - name: List all files after build
+      run: dir /s /b
+      # エラーが出ても処理を続行させる設定
+      continue-on-error: true
 
+    # 5. 完成品をZIPにまとめる（これは失敗しても今はOK）
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll
-        # ここが最後の修正点です！正しいパスに直しました。
-        path: OBD.NET/OBD.NET/bin/Release/**/*.dll
+        # このパスは偵察結果を見てから直します
+        path: "**/bin/Release/**/*.dll"

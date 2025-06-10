@@ -27,4 +27,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll
-        path: OBD.NET/bin/Release/**/*.dll
+        # ここが真の宝の場所です！
+        path: OBD.NET/OBD.NET/bin/Release/**/*.dll

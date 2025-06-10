@@ -19,15 +19,14 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
-      # これが一番シンプルで正しい方法でした。私が余計な指定をしていました。
-      run: dotnet restore
+      # 事実1,2,3をすべて満たす唯一のコマンド
+      run: dotnet restore OBD.NET/OBD.NET.sln
 
-    - name: Build
-      # こちらも、これが一番シンプルで正しい方法でした。
-      run: dotnet build --no-restore --configuration Release
+    - name: Build project
+      # こちらも同様
+      run: dotnet build OBD.NET/OBD.NET.sln --no-restore --configuration Release
 
     - name: Upload artifact
-      # ここだけが、最初に直すべき唯一のポイントでした。
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll

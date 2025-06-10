@@ -19,16 +19,18 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
-      # ファイル名を指定せず、自動で探してもらうように変更。これが一番確実です。
+      # ここが重要！ OBD.NETフォルダの中で作業するように指定します
       run: dotnet restore
+      working-directory: ./OBD.NET
 
     - name: Build project
-      # こちらもファイル名を指定せず、自動でビルドさせます。
+      # こちらもOBD.NETフォルダの中で作業します
       run: dotnet build --no-restore --configuration Release
+      working-directory: ./OBD.NET
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll
-        # 完成したDLLを探しに行くパス（これは前回の修正でOKでした）
+        # 完成品を探しに行くパスはこれでOKです
         path: OBD.NET/bin/Release/**/*.dll

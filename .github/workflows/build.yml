@@ -19,16 +19,16 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
-      # slnファイルは一番上の階層にあるので、パスを修正します
-      run: dotnet restore OBD.NET.sln
+      # ファイル名を指定せず、自動で探してもらうように変更。これが一番確実です。
+      run: dotnet restore
 
     - name: Build project
-      # こちらもslnファイルのパスを修正します
-      run: dotnet build OBD.NET.sln --no-restore --configuration Release
+      # こちらもファイル名を指定せず、自動でビルドさせます。
+      run: dotnet build --no-restore --configuration Release
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll
-        # 完成したDLLを探しに行く正しい住所に修正します
+        # 完成したDLLを探しに行くパス（これは前回の修正でOKでした）
         path: OBD.NET/bin/Release/**/*.dll

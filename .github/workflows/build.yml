@@ -18,10 +18,10 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore OBD.NET
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build OBD.NET --no-restore --configuration Release
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

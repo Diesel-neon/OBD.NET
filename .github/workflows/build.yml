@@ -27,4 +27,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: OBD.NET-dll
-        path: OBD.NET/bin/Release/
+        path: OBD.NET/bin/Release/**/*.dll
